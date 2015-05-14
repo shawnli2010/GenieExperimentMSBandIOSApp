@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <MicrosoftBandKit_iOS/MicrosoftBandKit_iOS.h>
+#import "AFNetworking.h"
 
 
-@interface SkinTemperatureViewController : UIViewController <MSBClientManagerDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
+@interface SkinTemperatureViewController : UIViewController <MSBClientManagerDelegate,UIPickerViewDelegate,UIPickerViewDataSource,NSURLConnectionDelegate,NSURLConnectionDataDelegate>
 
 
 // Skin temperature output

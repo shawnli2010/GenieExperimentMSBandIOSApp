@@ -8,6 +8,7 @@
 
 #import "SkinTemperatureViewController.h"
 
+
 @interface SkinTemperatureViewController ()
 {
     NSMutableArray *pickerFeelingArray;
@@ -187,6 +188,57 @@
 -(void)pickerDoneClicked
 {
     [self.addFeelingTextField resignFirstResponder];
+}
+
+- (IBAction)requestButtonPressed:(UIButton *)sender {
+//    NSString *post = [NSString stringWithFormat:@"Username=%@&Password=%@",@"genie.calendar.ucsd@gmail.com",@"5056789"];
+//    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+//    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+//    
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setURL:[NSURL URLWithString:@"http:genie.ucsd.edu/api/v1/sensors/weather"]];
+//    [request setHTTPMethod:@"GET"];
+//    
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//    [request setHTTPBody:postData];
+//    
+//    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+//    
+//    if(conn) {
+//        NSLog(@"Connection Successful");
+//    } else {
+//        NSLog(@"Connection could not be made");
+//    }
+    
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://genie.ucsd.edu"]];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    [manager.requestSerializer setAuthorizationHeaderFieldWithUsername:@"genie.calendar.ucsd@gmail.com" password:@"5056789"];
+    
+    [manager GET:@"https://genie.ucsd.edu/api/v1/sensors/weather" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+// This method is used to receive the data which we get using post method.
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData*)data {
+    NSLog(@"in didReceiveData with data: %@", data);
+    
+    NSString *myString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    
+    NSLog(@"%@",myString);
+}
+
+// This method receives the error report in case of connection is not made to server.
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    NSLog(@"in didFailWithError with error: %@", error);
+}
+
+// This method is used to process the data after connection has made successfully.
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    
 }
 
 
