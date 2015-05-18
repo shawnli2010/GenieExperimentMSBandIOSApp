@@ -69,12 +69,12 @@
     {
         [self output:@"Starting HeartRate detection"];
         [self.client.sensorManager startHearRateUpdatesToQueue:nil errorRef:nil withHandler:^(MSBSensorHeartRateData *heartRateData, NSError *error) {
-            NSString *myString = [NSString stringWithFormat:@"HeartRate q: %d, r: %d", (int)(heartRateData.quality), (int)heartRateData.heartRate];
+            NSString *myString = [NSString stringWithFormat:@"q: %d, r: %d", (int)(heartRateData.quality), (int)heartRateData.heartRate];
             NSDate *date = [NSDate date];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"%hh:%mm:%ss"];
+            [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
             NSString *timeString = [formatter stringFromDate:date];
-            NSString* outString = [NSString stringWithFormat:@"%@, %@", myString, timeString];
+            NSString* outString = [NSString stringWithFormat:@"%@:  %@", timeString, myString];
             if (heartRateData.quality != 0) {
                 [self output:outString];
             }

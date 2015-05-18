@@ -70,13 +70,17 @@
     {
         [self output:@"Starting skin temperature updates..."];
         [self.client.sensorManager startSkinTempUpdatesToQueue:nil errorRef:nil withHandler:^(MSBSensorSkinTempData *skinTemperatureData, NSError *error) {
-            //self.accelLabel.text = [NSString stringWithFormat:@"Temperature Data: T=%+0.2f", skinTemperatureData.temperature];
-            NSString *myString = [NSString stringWithFormat:@"Temperature, %+0.4f", skinTemperatureData.temperature];
+            // Convert c to f
+            double fTemp = skinTemperatureData.temperature * (9.0/5.0) + 32;
+            
+            // Create the Json Object for skin temperature
+            NSString *tempString = [NSString stringWithFormat:@"%f f", fTemp];
+            
             NSDate *date = [NSDate date];
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateFormat:@"%hh:%mm:%ss"];
+            [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
             NSString *timeString = [formatter stringFromDate:date];
-            NSString* outString = [NSString stringWithFormat:@"%@, %@", myString, timeString];
+            NSString* outString = [NSString stringWithFormat:@"%@,  %@", timeString, tempString];
             [self output:outString];
         }];
         
@@ -190,37 +194,6 @@
     [self.addFeelingTextField resignFirstResponder];
 }
 
-- (IBAction)requestButtonPressed:(UIButton *)sender {
-//    NSString *post = [NSString stringWithFormat:@"Username=%@&Password=%@",@"genie.calendar.ucsd@gmail.com",@"5056789"];
-//    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-//    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
-//    
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-//    [request setURL:[NSURL URLWithString:@"http:genie.ucsd.edu/api/v1/sensors/weather"]];
-//    [request setHTTPMethod:@"GET"];
-//    
-//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-//    [request setHTTPBody:postData];
-//    
-//    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-//    
-//    if(conn) {
-//        NSLog(@"Connection Successful");
-//    } else {
-//        NSLog(@"Connection could not be made");
-//    }
-    
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://genie.ucsd.edu"]];
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-    [manager.requestSerializer setAuthorizationHeaderFieldWithUsername:@"genie.calendar.ucsd@gmail.com" password:@"5056789"];
-    
-    [manager GET:@"https://genie.ucsd.edu/api/v1/sensors/weather" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
 
 // This method is used to receive the data which we get using post method.
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData*)data {

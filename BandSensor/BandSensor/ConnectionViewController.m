@@ -76,7 +76,7 @@
     _client = [clients firstObject];
     if ( _client == nil )
     {
-        [self.hud show:NO];
+        [self.hud hide:YES];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failed"
                                                         message:@"No Bands Attached"
                                                        delegate:nil
@@ -95,7 +95,7 @@
 
 - (void)clientManager:(MSBClientManager *)clientManager clientDidConnect:(MSBClient *)client
 {
-    [self.hud show:NO];    
+    [self.hud hide:YES];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success"
                                                     message:@"Band connected!"
                                                    delegate:nil
